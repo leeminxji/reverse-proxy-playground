@@ -1,0 +1,42 @@
+version: "3.9"
+
+networks:
+  reverse-proxy:
+    driver: bridge
+
+services:
+  nginx:
+    container_name: rp-nginx
+    build:
+      context: nginx
+      dockerfile: docker/Dockerfile
+    restart: always
+    ports:
+      - "80:80"
+    # expose:
+    #   - "8080"
+    networks:
+      - reverse-proxy
+    depends_on:
+      - svelte01
+      - svelte02
+  svelte01:
+    container_name: svelte01
+    build:
+      context: svelte01
+      dockerfile: docker/Dockerfile
+    restart: always
+    # expose:
+    #   - "8080"
+    networks:
+      - reverse-proxy
+  svelte02:
+    container_name: svelte02
+    build:
+      context: svelte02
+      dockerfile: docker/Dockerfile
+    restart: always
+    # expose:
+    #   - "8080"
+    networks:
+      - reverse-proxy
